@@ -1,0 +1,29 @@
+{
+  "name": "rest-api-auth-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarpaha/rest-api-auth-server.git"
+  },
+  "author": "tarpaha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tarpaha/rest-api-auth-server/issues"
+  },
+  "homepage": "https://github.com/tarpaha/rest-api-auth-server#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.0",
+    "mongoose": "^5.5.9",
+    "nconf": "^0.10.0",
+    "winston": "^3.2.1"
+  }
+}
