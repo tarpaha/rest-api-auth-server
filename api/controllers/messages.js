@@ -15,7 +15,14 @@ function getAll(req, res) {
             });
         }
         logger.info('-> messages.getAll() successful, count = ' + messages.length);
-        res.json({ status: 'success', messages });
+        res.json({
+            status: 'success',
+            messages: messages.map(message => ({
+                id: message._id,
+                text: message.text,
+                date: message.createdAt
+            }))
+        });
     });
 }
 
