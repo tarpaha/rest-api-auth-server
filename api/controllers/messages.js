@@ -1,22 +1,41 @@
 'use strict';
 
 const logger = require('../../libs/logger');
-const messageModel = require('../models/messages');
+const MessageModel = require('../models/messages');
 
 function getAll(req, res) {
     logger.info('-> messages.getAll()')
-    messageModel.find(function(err, messages) {
+    MessageModel.find(function(err, messages) {
         if(err) {
             logger.error('-> messages.getAll() error: ' + err.message);
             res.statusCode = 500;
-            return res.send({
+            return res.json({
                 status: 'error',
                 error: 'Server error'
             });
         }
         logger.info('-> messages.getAll() successful, count = ' + messages.length);
-        res.send({ status: 'success', messages });
+        res.json({ status: 'success', messages });
     });
 }
 
-module.exports = { getAll }
+function createTest(req, res) {
+    logger.info('-> messages.createTest()');
+    var message = new MessageModel({
+        text: 'test message created at ' + new Date().toUTCString()
+    });
+    message.save(function(err) {
+        if(err) {
+            logger.error('-> messages.createTest() error: ' + err.message);
+            res.statusCode = 500;
+            return res.json({
+                status: 'error',
+                error: 'Server error'
+            });
+        }
+        logger.info('-> messages.createTest() successful, id = ' + message._id);
+        res.json({ status: 'success', message: message });
+    });
+}
+
+module.exports = { getAll, createTest }
