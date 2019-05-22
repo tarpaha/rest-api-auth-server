@@ -5,7 +5,7 @@ const MessageModel = require('../models/messages');
 
 function getAll(req, res) {
     logger.info('-> messages.getAll()')
-    MessageModel.find(function(err, messages) {
+    MessageModel.find({}).sort({ createdAt: 'desc' }).exec(function(err, messages) {
         if(err) {
             logger.error('-> messages.getAll() error: ' + err.message);
             res.statusCode = 500;
