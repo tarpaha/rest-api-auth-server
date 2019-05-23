@@ -16,7 +16,7 @@ function createTest(req, res) {
             res.statusCode = 500;
             return res.json({
                 status: 'error',
-                error: 'Server error'
+                error: err.code == 11000 ? 'Duplicate email' : 'Server error'
             });
         }
         logger.info('-> users.createTest() successful, id = ' + user._id);
