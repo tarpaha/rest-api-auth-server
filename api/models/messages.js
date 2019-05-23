@@ -3,11 +3,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const messageSchema = Schema({
+const MessageSchema = Schema({
     text: { type: String }
 },
 {
     timestamps: true
 });
 
-module.exports = mongoose.model('Message', messageSchema);
+module.exports = mongoose.model('Message', MessageSchema);
