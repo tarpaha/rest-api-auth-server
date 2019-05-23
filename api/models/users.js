@@ -7,10 +7,11 @@ const saltRounds = 10;
 const UserSchema = mongoose.Schema({
     name: { type: String, trim: true, required: true },
     email: { type: String, trim: true, required: true },
-    password: { type: String, trim: true, required: true }
+    password: { type: String, trim: true, required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function(next) {    
     this.password = bcrypt.hashSync(this.password, saltRounds);
     next();
 });
