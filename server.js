@@ -6,7 +6,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
-const config = require('./libs/config')('./config.json');
+const config = require('./libs/config');
 const logger = require('./libs/logger');
 
 mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true, useCreateIndex: true });
@@ -19,6 +19,7 @@ db.once('open', function() {
 });
 
 const app = express();
+app.set('secretKey', config.get('secretKey'));
 app.use(cors());
 app.use(morgan('dev', { stream: logger.stream }));
 app.use(bodyParser.urlencoded({ extended: true }));

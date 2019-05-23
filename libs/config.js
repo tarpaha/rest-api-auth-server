@@ -2,9 +2,7 @@
 
 const nconf = require('nconf');
 
-module.exports = function(configFilename) {
-    return nconf
+module.exports = nconf
         .argv()
         .env()
-        .file({ file: configFilename });
-}
+        .file({ file: './config.json' });

@@ -1,7 +1,9 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const logger = require('../../libs/logger');
+const config = require('../../libs/config');
 const userModel = require('../models/users');
 
 function create(req, res) {
@@ -52,7 +54,8 @@ function authenticate(req, res) {
             });
         }
         logger.info('-> users.authenticate() successful');
-        res.json({ status: 'success', user: { id: user._id }});
+        const token = jwt.sign({ id: user._id }, config.get('jwt:key'), { expiresIn: config.get('jwt:expiresIn') });
+        res.json({ status: 'success', user: { id: user._id, token: token }});
     });
 }
 
