@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const config = require('./libs/config')('./config.json');
 const logger = require('./libs/logger');
 
-mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true });
+mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true, useCreateIndex: true });
 const db = mongoose.connection;
 db.on('error', function(err) {
     logger.error('DB connection error:', err.message);
