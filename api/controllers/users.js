@@ -40,7 +40,7 @@ function authenticate(req, res) {
             res.statusCode = 500;
             return res.json({
                 status: 'error',
-                error: 'Wrong credentials email'
+                error: 'Wrong credentials'
             });
         }
         if(!bcrypt.compareSync(req.body.password, user.password)) {
@@ -48,7 +48,7 @@ function authenticate(req, res) {
             res.statusCode = 500;
             return res.json({
                 status: 'error',
-                error: 'Wrong credentials password'
+                error: 'Wrong credentials'
             });
         }
         logger.info('-> users.authenticate() successful');
