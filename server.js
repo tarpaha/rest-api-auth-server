@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/messages', require('./routes/messages'));
+app.use('/users', require('./routes/users'));
 
 const port = config.get('port');
 app.listen(port, function() {
