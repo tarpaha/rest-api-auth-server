@@ -4,19 +4,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
 
 const config = require('./libs/config');
 const logger = require('./libs/logger');
+const mongoose = require('./libs/mongoose');
 
-mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true, useCreateIndex: true });
-const db = mongoose.connection;
-db.on('error', function(err) {
-    logger.error('DB connection error:', err.message);
-});
-db.once('open', function() {
-    logger.info('Connected to DB');
-});
+ mongoose.connect(config.get('mongoose:uri'), logger);
 
 const app = express();
 app.set('secretKey', config.get('secretKey'));
