@@ -59,6 +59,23 @@ function authenticate(req, res) {
     });
 }
 
+function validate(req, res, next) {
+    logger.info('-> users.validate()')
+    jwt.verify(req.headers['x-access-token'], config.get('jwt:key'), function(err, decoded) {
+        if(err) {
+            logger.info('-> users.validate() failed, error: ' + err.message);
+            res.statusCode = 500;
+            res.json({
+                status: 'error',
+                error: err.message
+            });
+        }
+        logger.info('-> users.validate() success, id = ' + decoded.id);
+        req.userId = decoded.id;
+        next();
+    });
+}
+
 // tests
 
 function testCreate(req, res) {
@@ -85,4 +102,4 @@ function testAuthSuccess(req, res) {
     authenticate(req, res);
 }
 
-module.exports = { testCreate, testAuthWrongEmail, testAuthWrongPassword, testAuthSuccess }
+module.exports = { validate, testCreate, testAuthWrongEmail, testAuthWrongPassword, testAuthSuccess }
