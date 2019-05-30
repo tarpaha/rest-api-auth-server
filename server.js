@@ -21,6 +21,10 @@ app.use(bodyParser.json());
 app.use('/messages', require('./routes/messages'));
 app.use('/users', require('./routes/users'));
 
+app.get('/favicon.ico', function(req, res) {
+    res.sendStatus(204);
+});
+
 const port = config.get('port');
 app.listen(port, function() {
     logger.info('Server started on: ' + port);
