@@ -6,7 +6,7 @@ const logger = require('../../libs/logger');
 const config = require('../../libs/config');
 const userModel = require('../models/users');
 
-function create(req, res) {
+function create(req, res, next) {
     logger.info('-> users.create()');
     var user = new userModel({
         name: req.body.name,
@@ -16,42 +16,27 @@ function create(req, res) {
     user.save(function(err) {
         if(err) {
             logger.error('-> users.create() error: ' + err.message);
-            res.statusCode = 500;
-            return res.json({
-                status: 'error',
-                error: err.code == 11000 ? 'Duplicate email' : 'Server error'
-            });
+            return next(new Error(err.code == 11000 ? 'duplicate email' : 'server error'));
         }
         logger.info('-> users.create() successful, id = ' + user._id);
         res.json({ status: 'success', user: { id: user._id }});
     });
 }
 
-function authenticate(req, res) {
+function authenticate(req, res, next) {
     logger.info('-> users.authenticate()');
     userModel.findOne({ email: req.body.email }, function(err, user) {
         if(err) {
             logger.error('-> users.authenticate() error: ' + err.message);
-            res.statusCode = 500;
-            return res.json({
-                status: 'error',
-                error: 'Server error'
-            });
+            return next(new Error('server error'));
         }
         if(!user) {
-            res.statusCode = 500;
-            return res.json({
-                status: 'error',
-                error: 'Wrong credentials'
-            });
+            logger.error('-> users.authenticate() error: no email found');
+            return next(new Error('wrong credentials'));
         }
         if(!bcrypt.compareSync(req.body.password, user.password)) {
-            logger.error('-> users.authenticate() error: bad credentials');
-            res.statusCode = 500;
-            return res.json({
-                status: 'error',
-                error: 'Wrong credentials'
-            });
+            logger.error('-> users.authenticate() error: wrong password');
+            return next(new Error('wrong credentials'));
         }
         logger.info('-> users.authenticate() successful');
         const token = jwt.sign({ id: user._id }, config.get('jwt:key'), { expiresIn: config.get('jwt:expiresIn') });
@@ -64,11 +49,7 @@ function validate(req, res, next) {
     jwt.verify(req.headers['x-access-token'], config.get('jwt:key'), function(err, decoded) {
         if(err) {
             logger.info('-> users.validate() failed, error: ' + err.message);
-            res.statusCode = 500;
-            res.json({
-                status: 'error',
-                error: err.message
-            });
+            return next(new Error(err.message));
         }
         logger.info('-> users.validate() success, id = ' + decoded.id);
         req.userId = decoded.id;
@@ -78,28 +59,28 @@ function validate(req, res, next) {
 
 // tests
 
-function testCreate(req, res) {
+function testCreate(req, res, next) {
     req.body.name = 'name';
     req.body.email = 'email';
     req.body.password = 'password';
-    create(req, res);
+    create(req, res, next);
 }
 
-function testAuthWrongEmail(req, res) {
+function testAuthWrongEmail(req, res, next) {
     req.body.email = 'wrong';
-    authenticate(req, res);
+    authenticate(req, res, next);
 }
 
-function testAuthWrongPassword(req, res) {
+function testAuthWrongPassword(req, res, next) {
     req.body.email = 'email';
     req.body.password = 'wrong';
-    authenticate(req, res);
+    authenticate(req, res, next);
 }
 
-function testAuthSuccess(req, res) {
+function testAuthSuccess(req, res, next) {
     req.body.email = 'email';
     req.body.password = 'password';
-    authenticate(req, res);
+    authenticate(req, res, next);
 }
 
 module.exports = { validate, testCreate, testAuthWrongEmail, testAuthWrongPassword, testAuthSuccess }

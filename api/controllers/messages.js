@@ -3,16 +3,12 @@
 const logger = require('../../libs/logger');
 const MessageModel = require('../models/messages');
 
-function getAll(req, res) {
+function getAll(req, res, next) {
     logger.info('-> messages.getAll()')
     MessageModel.find({}).sort({ createdAt: 'desc' }).exec(function(err, messages) {
         if(err) {
             logger.error('-> messages.getAll() error: ' + err.message);
-            res.statusCode = 500;
-            return res.json({
-                status: 'error',
-                error: 'Server error'
-            });
+            return next(new Error('server error'));
         }
         logger.info('-> messages.getAll() successful, count = ' + messages.length);
         res.json({
@@ -26,7 +22,7 @@ function getAll(req, res) {
     });
 }
 
-function createTest(req, res) {
+function createTest(req, res, next) {
     logger.info('-> messages.createTest()');
     var message = new MessageModel({
         text: 'test message created at ' + new Date().toUTCString()
@@ -34,11 +30,7 @@ function createTest(req, res) {
     message.save(function(err) {
         if(err) {
             logger.error('-> messages.createTest() error: ' + err.message);
-            res.statusCode = 500;
-            return res.json({
-                status: 'error',
-                error: 'Server error'
-            });
+            return next(new Error('server error'));
         }
         logger.info('-> messages.createTest() successful, id = ' + message._id);
         res.json({ status: 'success', message: message });
