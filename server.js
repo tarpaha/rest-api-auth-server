@@ -12,7 +12,6 @@ const mongoose = require('./libs/mongoose');
  mongoose.connect(config.get('mongoose:uri'), logger);
 
 const app = express();
-app.set('secretKey', config.get('secretKey'));
 app.use(cors());
 app.use(morgan('dev', { stream: logger.stream }));
 app.use(bodyParser.urlencoded({ extended: true }));
