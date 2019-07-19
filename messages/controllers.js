@@ -1,7 +1,7 @@
 'use strict';
 
-const logger = require('../../libs/logger');
-const MessageModel = require('../models/messages');
+const logger = require('../libs/logger');
+const MessageModel = require('./models');
 
 function getAll(req, res, next) {
     logger.info('-> messages.getAll()')

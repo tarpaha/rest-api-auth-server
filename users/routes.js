@@ -1,7 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
-const usersController = require('../api/controllers/users');
+const usersController = require('./controllers');
 
 router.get('/test_create', usersController.testCreate);
 router.get('/test_auth_wrong_email', usersController.testAuthWrongEmail);

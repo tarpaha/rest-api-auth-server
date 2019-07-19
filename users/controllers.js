@@ -2,9 +2,9 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const logger = require('../../libs/logger');
-const config = require('../../libs/config');
-const userModel = require('../models/users');
+const logger = require('../libs/logger');
+const config = require('../libs/config');
+const userModel = require('./models');
 
 function create(req, res, next) {
     logger.info('-> users.create()');

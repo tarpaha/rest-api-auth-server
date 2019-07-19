@@ -17,8 +17,8 @@ app.use(morgan('dev', { stream: logger.stream }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/messages', require('./routes/messages'));
-app.use('/users', require('./routes/users'));
+app.use('/messages', require('./messages/routes'));
+app.use('/users', require('./users/routes'));
 
 app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
